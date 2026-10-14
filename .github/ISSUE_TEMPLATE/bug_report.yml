@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible defect in an accessible Pipesor repository.
+title: "fix: "
+body:
+  - type: markdown
+    attributes:
+      value: "Do not report security vulnerabilities or share secrets here. Use the repository's SECURITY.md."
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem
+      description: What is happening?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Open ...\n2. Click ...\n3. Observe ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and evidence
+      description: Browser, OS, app version/commit, screenshots, logs without secrets.
