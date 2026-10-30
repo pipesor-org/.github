@@ -11,7 +11,7 @@ This repository contains the public organization profile and default community f
 - [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md): default pull request checklist.
 - [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/): issue forms.
 
-Repository-specific instructions take precedence when present. For frontend implementation rules, consult `AGENTS.md` and `docs/` in the private `pipesor-frontend` repository.
+The contribution guide defines the organization-wide development standard for contributors and agents. Repository instructions add implementation details and should be aligned with it. The existing frontend GitFlow guidance remains to be migrated separately; consult its `AGENTS.md` and `docs/` for implementation rules in the meantime.
 
 **Visibility:** this repository is public. Do not commit internal documentation, credentials, or unreleased technical information. The maintainer contacts published in [`SECURITY.md`](SECURITY.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) are intentional: they are the approved private reporting channels for this project.
 

@@ -9,15 +9,25 @@ Pipesor repositories may be private. Contributions are currently accepted from c
 3. Keep changes focused. Avoid unrelated refactors, dependency additions, or invented business rules.
 4. Never commit credentials, tokens, personal data, `.env` files, or generated output.
 
-## Branching — Git Flow
+## Branching — Trunk-Based Development
 
-- `main`: stable, approved baselines and releases.
-- `develop`: integration branch for ongoing work.
-- `feature/<short-topic>` and `fix/<short-topic>`: branch from `develop`; open a PR into `develop`.
-- `release/<version>`: branch from `develop`; integrate into `main` **and** back into `develop`.
-- `hotfix/<short-topic>`: branch from `main`; integrate into `main` **and** `develop`.
+- `main` is the shared trunk. Keep it healthy and releasable; integrate small changes frequently.
+- Create short-lived `feature/<topic>` or `fix/<topic>` branches from `main`, open a PR into `main`, and delete the branch after merge. Do not push directly to protected branches.
+- Validate the PR with the repository's required checks and a review. Use a Conventional Commit PR title and squash merge when practical. A PR build may check that an artifact builds, but does not publish the release artifact.
+- Do not use long-lived `develop` or routine release branches. Repository procedures should implement this standard; existing conflicting guidance needs migration.
 
-Do not push directly to protected branches. Use pull requests and follow branch-specific policies. A repository may document more specific merge and release procedures.
+## Target artifact promotion and releases
+
+This is the target model for services with staged deployments, not a claim that automation exists today. Repositories document their actual implementation and applicable environments.
+
+1. After merge, verify the merged commit and build an immutable artifact once, identified by commit and digest. Deploy that artifact to development automatically; record the artifact, environment, and deployment result.
+2. Promote the same digest on demand to QA only after a successful development deployment. Promote to staging only after successful QA and independent QA approval. Check health and record each result.
+3. Release only a commit reachable from `main` with a successful staging deployment of the same digest. Assign a SemVer version from Conventional Commits since the previous version tag, associate it with that digest without rebuilding, tag the commit `vX.Y.Z`, and publish release notes. Protect release tags.
+4. Promote the versioned artifact to production only after the same digest succeeds in staging and an independent product owner approves. Record the outcome. Approvers must not approve runs they started.
+
+For an urgent production fix when `main` cannot be released, merge the fix into `main` first. Create a short-lived `hotfix/X.Y.Z` from the production tag `vX.Y.Z`, cherry-pick the fix with `-x`, and build a new immutable artifact. After green CI, promote it through QA and staging, release the next patch version without rebuilding, and promote to production with the same approvals. Run this exceptional path from the hotfix branch and delete it after release. Retain artifacts used in QA, staging, production, or releases; clean up older unpromoted commit artifacts according to a documented retention policy.
+
+The landing page documents Cloudflare Workers Builds for static production and branch previews; its deployment setup is a separate implementation, not the staged service flow above. The future Azure-based frontend/backend should implement the target model using its own documented infrastructure and controls. No particular registry, host, or workflow is required organization-wide.
 
 ## Commits — Angular-style Conventional Commits
 
@@ -40,8 +50,8 @@ Use `!` and/or a `BREAKING CHANGE:` footer for incompatible changes. Do not use 
 - Use a Conventional-Commit-style PR title.
 - Describe the purpose, key changes, how you validated them, and anything not verified.
 - Attach screenshots or recordings for visual changes when practical.
-- Obtain review before merging shared branches; prefer squash merges for feature/fix PRs into `develop`.
-- Use the repository's documented Git Flow merge strategy for releases and hotfixes; do not squash away required branch ancestry without reviewing the implications.
+- Obtain review and pass required checks before merging into `main`; prefer squash merges.
+- Follow the documented promotion and release controls for the repository.
 
 ## Validation
 
