@@ -2,69 +2,62 @@
 
 Pipesor repositories may be private. Contributions are currently accepted from collaborators with repository access or through a maintainer-approved process. Public visibility of this policy does not imply public access to source code or permission to reuse it.
 
-## Before contributing
+## Scope and preparation
+
+This guide is the source of organization-wide contribution rules. Each repository's README, AGENTS.md and technical guides define its setup, checks, scopes and implementation procedures within these rules. Document and resolve conflicts before changing an established workflow.
 
 1. Confirm the work is approved or tracked in a GitHub issue or agreed task.
-2. Read the repository's `README.md`, `AGENTS.md` (if present), and domain-specific documentation.
-3. Keep changes focused. Avoid unrelated refactors, dependency additions, or invented business rules.
-4. Never commit credentials, tokens, personal data, `.env` files, or generated output.
+2. Read the repository's instructions and relevant domain documentation.
+3. Keep changes focused. Avoid unrelated refactors, dependency additions or invented business rules.
+4. Never commit credentials, tokens, personal data or .env files. Keep build output and machine-specific state out of source control unless the repository explicitly requires a reviewed generated artifact.
 
 ## Branching — Trunk-Based Development
 
-- `main` is the shared trunk. Keep it healthy and releasable; integrate small changes frequently.
-- Create short-lived `feature/<topic>` or `fix/<topic>` branches from `main`, open a PR into `main`, and delete the branch after merge. Do not push directly to protected branches.
-- Validate the PR with the repository's required checks and a review. Use a Conventional Commit PR title and squash merge when practical. A PR build may check that an artifact builds, but does not publish the release artifact.
-- Do not use long-lived `develop` or routine release branches. Repository procedures should implement this standard; existing conflicting guidance needs migration.
-
-## Target artifact promotion and releases
-
-This is the target model for services with staged deployments, not a claim that automation exists today. Repositories document their actual implementation and applicable environments.
-
-1. After merge, verify the merged commit and build an immutable artifact once, identified by commit and digest. Deploy that artifact to development automatically; record the artifact, environment, and deployment result.
-2. Promote the same digest on demand to QA only after a successful development deployment. Promote to staging only after successful QA and independent QA approval. Check health and record each result.
-3. Release only a commit reachable from `main` with a successful staging deployment of the same digest. Assign a SemVer version from Conventional Commits since the previous version tag, associate it with that digest without rebuilding, tag the commit `vX.Y.Z`, and publish release notes. Protect release tags.
-4. Promote the versioned artifact to production only after the same digest succeeds in staging and an independent product owner approves. Record the outcome. Approvers must not approve runs they started.
-
-For an urgent production fix when `main` cannot be released, merge the fix into `main` first. Create a short-lived `hotfix/X.Y.Z` from the production tag `vX.Y.Z`, cherry-pick the fix with `-x`, and build a new immutable artifact. After green CI, promote it through QA and staging, release the next patch version without rebuilding, and promote to production with the same approvals. Run this exceptional path from the hotfix branch and delete it after release. Retain artifacts used in QA, staging, production, or releases; clean up older unpromoted commit artifacts according to a documented retention policy.
-
-The landing page documents Cloudflare Workers Builds for static production and branch previews; its deployment setup is a separate implementation, not the staged service flow above. The future Azure-based frontend/backend should implement the target model using its own documented infrastructure and controls. No particular registry, host, or workflow is required organization-wide.
+- Keep main healthy and releasable.
+- Create small, short-lived feature/<topic> or fix/<topic> branches from main and open PRs back into main. Delete branches after merge.
+- Do not push directly to main, maintain a long-lived develop branch or create routine release branches.
+- Follow the exceptional hotfix process below when a production release cannot take the head of main.
 
 ## Commits — Angular-style Conventional Commits
 
-Format: `type(scope): imperative summary` (scope optional). Write summaries in English.
+Use `type(scope): imperative summary`, with an optional scope and an English summary. Repository configuration defines additional formatting constraints.
 
-Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
+| Type | Purpose |
+| --- | --- |
+| feat | A new user-facing capability. |
+| fix | A bug fix. |
+| docs | Documentation changes. |
+| style | Formatting changes that do not change behavior. |
+| refactor | Code restructuring without a feature or bug fix. |
+| perf | Performance improvements. |
+| test | Test additions or corrections. |
+| build | Build tooling or dependency changes. |
+| ci | Continuous integration changes. |
+| chore | Maintenance outside the other types. |
+| revert | Reverting a previous change. |
 
-Examples:
+Examples: feat(operations): add incident validation queue; fix(sidebar): prevent profile menu overlap; docs(repo): clarify contribution guidelines.
 
-```text
-feat(operations): add incident validation queue
-fix(sidebar): prevent profile menu overlap
-docs(repo): clarify contribution guidelines
-```
+Use `!` and/or a `BREAKING CHANGE:` footer for incompatible changes and explain the migration. Do not use feat for purely documentary or maintenance changes.
 
-Use `!` and/or a `BREAKING CHANGE:` footer for incompatible changes. Do not use `feat` for purely documentary or maintenance changes.
+## Pull requests and validation
 
-## Pull requests
+- Use a Conventional Commit title. Describe the problem, resulting behavior and related task.
+- Report the applicable repository checks, their results and anything not verified. Do not claim browser or functional behavior was tested unless it was exercised.
+- Attach visual evidence for UI changes when practical.
+- Obtain review, resolve comments and pass required checks before merging. Prefer squash merge and respect the repository's configured merge method.
+- Where the squash message uses the PR title and description, put migration instructions and any BREAKING CHANGE: footer in the description, even if already present in individual commits. Preserve that information when merging.
 
-- Use a Conventional-Commit-style PR title.
-- Describe the purpose, key changes, how you validated them, and anything not verified.
-- Attach screenshots or recordings for visual changes when practical.
-- Obtain review and pass required checks before merging into `main`; prefer squash merges.
-- Follow the documented promotion and release controls for the repository.
+## Target artifact promotion and releases
 
-## Validation
+These are target principles for services with staged deployments, not a claim that automation exists today. Each repository documents its actual deployment model, applicable environments and implementation procedures. Deployment platforms, commands, Terraform plans and state handling belong in those repository guides.
 
-Run the repository's declared checks. For `pipesor-frontend`, the current baseline uses:
+Verify the merged commit before creating a deployment candidate; PR validation alone is insufficient. Build one immutable artifact, identified by commit and digest, and promote that same digest through development, QA, staging and production. The target flow deploys to development automatically; later stages require evidence of the preceding stage's success. Require independent QA approval before staging and independent product-owner approval before production. Approvers must not approve runs they started.
 
-```bash
-bun run typecheck
-bun run lint
-bun run build
-```
+Release only commits reachable from main whose artifact passed staging. Derive SemVer from Conventional Commits, protect vX.Y.Z release tags, and associate the version and notes with the same artifact without rebuilding. Record deployment results and approvals. Retain artifacts used in QA, staging, production or releases, and document cleanup of older unpromoted artifacts.
 
-Do not claim browser interactions were tested unless they were actually exercised.
+For an urgent production fix that cannot release main, merge the fix into main first, then cherry-pick it with -x onto a short-lived hotfix/X.Y.Z branch from the production tag. Build a new immutable artifact, pass CI, promote through QA and staging, release the next patch version without rebuilding, and require the same production approval. Delete the hotfix branch after release.
 
 ## Licenses and ownership
 
-The project's licensing decision is pending. Do not assume code is open source, accept third-party contributions with unclear rights, or add a license without approval from the rights holders.
+The project's licensing decision is pending. Do not assume code is open source, accept third-party contributions with unclear rights or add a license without approval from the rights holders.

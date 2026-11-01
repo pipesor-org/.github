@@ -1,18 +1,14 @@
 ## Summary
 
-<!-- What changed, and why? -->
+<!-- Describe the problem, the change and the resulting behavior. -->
 
 ## Related issue or task
 
 <!-- Link if applicable. -->
 
-## Changes
-
-<!-- Briefly describe the relevant changes. -->
-
 ## Verification
 
-- [ ] Relevant typecheck/lint/build checks passed (specify below)
+- [ ] Applicable repository checks passed (specify below)
 - [ ] Functional behavior checked where applicable
 - [ ] UI/responsive behavior checked where applicable
 - [ ] No credentials, secrets, or unrelated files included
@@ -27,4 +23,4 @@
 
 ## Notes for reviewers
 
-<!-- Risks, migration notes, breaking changes, or decisions needed. -->
+<!-- Record risks or decisions needed. For incompatible changes, explain the migration here and include a BREAKING CHANGE: footer in the PR description. Preserve it in the squash commit. -->

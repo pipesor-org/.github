@@ -11,7 +11,7 @@ This repository contains the public organization profile and default community f
 - [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md): default pull request checklist.
 - [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/): issue forms.
 
-The contribution guide defines the organization-wide development standard for contributors and agents. Repository instructions add implementation details and should be aligned with it. The existing frontend GitFlow guidance remains to be migrated separately; consult its `AGENTS.md` and `docs/` for implementation rules in the meantime.
+The [contribution guide](CONTRIBUTING.md) maintains organization-wide development rules. Repository READMEs, AGENTS.md files and technical guides describe local setup, checks and procedures within those rules.
 
 **Visibility:** this repository is public. Do not commit internal documentation, credentials, or unreleased technical information. The maintainer contacts published in [`SECURITY.md`](SECURITY.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) are intentional: they are the approved private reporting channels for this project.
 
