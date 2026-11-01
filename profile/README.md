@@ -7,10 +7,10 @@ Pipesor is developed as a bachelor's thesis in Software Engineering at Universid
 ## Project areas
 
 - **Operations:** incident triage and diagnosis validation.
-- **Pipelines:** monitored CI/CD workflows and configuration (planned).
-- **History:** incident history and operational insights (planned).
+- **Pipelines:** visibility into monitored CI/CD workflows.
+- **History:** incident history and operational insights.
 
-The project is under active development. Source repositories may remain private while implementation and publication rights are reviewed.
+The project is under active development. The frontend currently demonstrates these areas with simulated data; backend integration and operational actions remain planned. Source repositories may remain private while implementation and publication rights are reviewed.
 
 ## Collaboration
 
