@@ -1,0 +1,14 @@
+{
+  "name": "pipesor-org-github",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.4",
+  "scripts": {
+    "setup:hooks": "lefthook install",
+    "commitlint": "bun ./node_modules/@commitlint/cli/cli.js"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4"
+  }
+}

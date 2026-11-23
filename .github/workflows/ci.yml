@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  conventions:
+    uses: pipesor-org/pipesor-ci/.github/workflows/conventions.yml@df3b5fc08bc631912ff34be9154aa27776472754 # v1.0.0
+    permissions:
+      contents: read
