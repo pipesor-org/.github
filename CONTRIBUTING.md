@@ -46,11 +46,13 @@ Use `!` and/or a `BREAKING CHANGE:` footer for incompatible changes and explain 
 - Report the applicable repository checks, their results and anything not verified. Do not claim browser or functional behavior was tested unless it was exercised.
 - Attach visual evidence for UI changes when practical.
 - Obtain review, resolve comments and pass required checks before merging. Prefer squash merge and respect the repository's configured merge method.
+- Keep PR titles within 65 characters so the squash header, with its ` (#N)` suffix, stays within the 72-character commit limit.
+- Every repository runs the shared CI from [pipesor-ci](https://github.com/pipesor-org/pipesor-ci): canonical commitlint/Lefthook configuration, PR title, description and commits, workflow linting, and the repository's own checks. Default branches are protected by rulesets that require pull requests and squash merges.
 - Where the squash message uses the PR title and description, put migration instructions and any BREAKING CHANGE: footer in the description, even if already present in individual commits. Preserve that information when merging.
 
 ## Target artifact promotion and releases
 
-These are target principles for services with staged deployments, not a claim that automation exists today. Each repository documents its actual deployment model, applicable environments and implementation procedures. Deployment platforms, commands, Terraform plans and state handling belong in those repository guides.
+These are target principles for services with staged deployments. Today every container-delivered repository verifies the merged commit, publishes one immutable image with a candidate manifest and never deploys; the environment Terraform roots in pipesor-iac own deployed images, so promotion and rollback are reviewed plans with a digest. Approval gates beyond development are not configured yet. Each repository documents its actual deployment model, applicable environments and implementation procedures. Deployment platforms, commands, Terraform plans and state handling belong in those repository guides.
 
 Verify the merged commit before creating a deployment candidate; PR validation alone is insufficient. Build one immutable artifact, identified by commit and digest, and promote that same digest through development, QA, staging and production. The target flow deploys to development automatically; later stages require evidence of the preceding stage's success. Require independent QA approval before staging and independent product-owner approval before production. Approvers must not approve runs they started.
 
