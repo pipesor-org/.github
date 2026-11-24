@@ -60,6 +60,21 @@ Release only commits reachable from main whose artifact passed staging. Derive S
 
 For an urgent production fix that cannot release main, merge the fix into main first, then cherry-pick it with -x onto a short-lived hotfix/X.Y.Z branch from the production tag. Build a new immutable artifact, pass CI, promote through QA and staging, release the next patch version without rebuilding, and require the same production approval. Delete the hotfix branch after release.
 
+## Repository metadata
+
+Every repository has a description and topics that follow this standard. Set them when creating the repository and update them when its role, scope or stack changes.
+
+- **Description:** one English sentence in the present tense that states what the repository does, ending with "for Pipesor." or "in Pipesor.". Do not include temporary status (planned, demo, pilot) or the technology stack, which belongs in topics.
+- **Topics**, in layers:
+  1. `pipesor` on every repository.
+  2. `aiops` on repositories that are part of the product (services, frontend, landing, documentation, infrastructure and evaluation), not on tooling repositories.
+  3. One role topic, such as `microservice`, `dashboard`, `landing-page`, `infrastructure-as-code`, `documentation`, `evaluation`, `developer-tools`, `reusable-workflows` or `community-standards`.
+  4. One or two capability topics, such as `data-ingestion`, `incident-management`, `evidence-correlation`, `log-processing`, `retrieval-augmented-generation` or `root-cause-analysis`.
+  5. The main stack: for example `java` and `spring-boot`, `python` and `fastapi`, `react` and `typescript`, `terraform` and `azure`, or `github-actions`.
+- **Homepage:** only for repositories that publish a public site.
+
+Example: `pipesor-pipeline-service` — "Manages monitored workflows, executions and incidents for Pipesor." with `pipesor`, `aiops`, `microservice`, `ci-cd`, `incident-management`, `java`, `spring-boot`.
+
 ## Licenses and ownership
 
 The project's licensing decision is pending. Do not assume code is open source, accept third-party contributions with unclear rights or add a license without approval from the rights holders.
